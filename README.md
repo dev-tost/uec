@@ -32,23 +32,16 @@ zbiorczo podbić w `index.html` **i** we wszystkich `import` w plikach `js/*.js`
 Komentarze z numerami sekcji.
 
 ### Baza danych
-Pliku `data.json` już nie ma w repo — cały stan trzymany jest w Supabase (adres i klucz publiczny na górze `js/supabase.js`).
+Cały stan trzymany jest w Supabase (adres i klucz publiczny na górze `js/supabase.js`).
 
 Tabele: `team`, `rounds`, `draws`, `coffees`, `purchases`, `ratings`. Zdjęcia kupionej kawy lądują w Storage
 buckecie `coffee-photos` (upload przez `sb.uploadPhoto()`).
 
-`js/state.js` przy starcie pobiera wszystko naraz (`loadData()`) i normalizuje do jednej struktury `state.data`,
-podobnej do dawnego `data.json`.
+`js/state.js` przy starcie pobiera wszystko naraz (`loadData()`) i normalizuje do jednej struktury `state.data`.
 
 ### Kim jestem
 Przy pierwszym wejściu użytkownik wybiera siebie z listy zespołu — wybór zapamiętywany jest w `localStorage`
 (`akcja-kawowa-who`). Na tej podstawie strona wie, kto aktualnie ocenia kawę / czyja jest kolej (patrz `state.whoAmI`).
-
-## Co do dorobienia
-
-- Eksport historii do CSV / kalendarza (.ics)
-- Klucz Giphy własny zamiast publicznego (publiczny ma niski rate limit, patrz `js/animations.js`)
-
 
 ## Wygląd
 
