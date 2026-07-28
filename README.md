@@ -5,21 +5,20 @@ Strona wewnętrzna. Akcja kawowa - losowanie osoby kupującej kawę.
 ## Pliki
 
 ```
-app/
-├── index.html          ← cała struktura strony (jeden plik, prawie pusty — resztę dorysowuje JavaScript)
-├── style.css           ← wszystkie style, poukładane w sekcje
-└── js/                 ← logika strony, podzielona na pliki (bez żadnego bundlera/build-toola)
-    ├── supabase.js       łączy się z bazą danych Supabase — pobiera i zapisuje dane oraz zdjęcia
-    ├── state.js          trzyma aktualny stan aplikacji i wczytuje dane z Supabase przy starcie
-    ├── helpers.js        drobne funkcje pomocnicze (np. znajdź osobę po ID, kto gra w tej rundzie, ranking kaw)
-    ├── render-tabs.js    rysuje 5 zakładek (Losowanie/Zespół/Historia/Statystyki/Ranking)
-    ├── render-modals.js  rysuje okienka (zakup, ocena, karta kawy, dodaj/edytuj uczestnika)
-    ├── render.js         główna funkcja rysująca stronę — pasek u góry, zakładki i to co aktualnie wybrane
-    ├── animations.js     animacja losowania (bęben), losowy gif z Giphy, konfetti
-    ├── toast.js          małe powiadomienia na dole ekranu (np. "zapisano")
-    ├── actions.js        wszystko, co zapisuje dane do Supabase (nowy zakup, ocena, losowanie...)
-    ├── events.js         podpina obsługę kliknięć pod przyciski — uruchamia się po każdym rysowaniu strony
-    └── main.js           punkt startowy: wczytaj dane, narysuj stronę
+index.html             ← cała struktura strony (jeden plik, prawie pusty — resztę dorysowuje JavaScript)
+style.css               ← wszystkie style, poukładane w sekcje
+js/                      ← logika strony, podzielona na pliki (bez żadnego bundlera/build-toola)
+├── supabase.js       łączy się z bazą danych Supabase — pobiera i zapisuje dane oraz zdjęcia
+├── state.js          trzyma aktualny stan aplikacji i wczytuje dane z Supabase przy starcie
+├── helpers.js        drobne funkcje pomocnicze (np. znajdź osobę po ID, kto gra w tej rundzie, ranking kaw)
+├── render-tabs.js    rysuje 5 zakładek (Losowanie/Zespół/Historia/Statystyki/Ranking)
+├── render-modals.js  rysuje okienka (zakup, ocena, karta kawy, dodaj/edytuj uczestnika)
+├── render.js         główna funkcja rysująca stronę — pasek u góry, zakładki i to co aktualnie wybrane
+├── animations.js     animacja losowania (bęben), losowy gif z Giphy, konfetti
+├── toast.js          małe powiadomienia na dole ekranu (np. "zapisano")
+├── actions.js        wszystko, co zapisuje dane do Supabase (nowy zakup, ocena, losowanie...)
+├── events.js         podpina obsługę kliknięć pod przyciski — uruchamia się po każdym rysowaniu strony
+└── main.js           punkt startowy: wczytaj dane, narysuj stronę
 ```
 
 ### `index.html`
@@ -32,30 +31,23 @@ zbiorczo podbić w `index.html` **i** we wszystkich `import` w plikach `js/*.js`
 ### `style.css`
 Komentarze z numerami sekcji.
 
-### `data.json`
-Nieaktualne — stan trzymany jest teraz w Supabase (patrz `js/supabase.js`), nie w `data.json`.
+### Baza danych
+Pliku `data.json` już nie ma w repo — cały stan trzymany jest w Supabase (adres i klucz publiczny na górze `js/supabase.js`).
+
+Tabele: `team`, `rounds`, `draws`, `coffees`, `purchases`, `ratings`. Zdjęcia kupionej kawy lądują w Storage
+buckecie `coffee-photos` (upload przez `sb.uploadPhoto()`).
+
+`js/state.js` przy starcie pobiera wszystko naraz (`loadData()`) i normalizuje do jednej struktury `state.data`,
+podobnej do dawnego `data.json`.
+
+### Kim jestem
+Przy pierwszym wejściu użytkownik wybiera siebie z listy zespołu — wybór zapamiętywany jest w `localStorage`
+(`akcja-kawowa-who`). Na tej podstawie strona wie, kto aktualnie ocenia kawę / czyja jest kolej (patrz `state.whoAmI`).
 
 ## Co do dorobienia
 
-- Zapis do `data.json` przez GitHub API — teraz zmiany są tylko w pamięci, znikają po odświeżeniu
-- Upload zdjęcia kupionej kawy (też przez GitHub API)
-- Formularz oceny kawy (każdy ze swojego konta)
 - Eksport historii do CSV / kalendarza (.ics)
-- Modal "+ dodaj osobę" / "edytuj"
-- Klucz Giphy własny zamiast publicznego (publiczny ma niski rate limit)
-
-## Plan: zapis przez GitHub API
-
-Zarys (do zaimplementowania w kolejnym kroku):
-
-1. Wygeneruj **Personal Access Token** na GitHubie (uprawnienia: `repo`)
-2. W `app.js` dodaj funkcję `saveData()`:
-   - czyta token z `localStorage` (każdy user wkleja go raz)
-   - robi PUT na `https://api.github.com/repos/USER/REPO/contents/app/data.json`
-   - body: nowy `data.json` zakodowany w base64 + SHA poprzedniego pliku
-3. Wołaj `saveData()` po każdym losowaniu / dodaniu osoby / itd.
-
-Plik `data.json` w repo staje się "bazą danych". Każda zmiana = git commit. Historia commitów = audyt.
+- Klucz Giphy własny zamiast publicznego (publiczny ma niski rate limit, patrz `js/animations.js`)
 
 
 ## Wygląd
@@ -64,8 +56,10 @@ Wszystkie kolory są zmiennymi CSS na górze `style.css` (sekcja 1):
 
 ```css
 :root {
-  --coffee:    #8b5a2b;   /* główny akcent */
-  --paper:     #f7f3ec;   /* tło */
+  --paper:   #ffffff;   /* tło strony */
+  --coffee:  #030213;   /* akcent główny */
+  --ink:     #1b1b1f;   /* główny tekst */
+  --danger:  #d4183d;   /* błąd / out */
   ...
 }
 ```
