@@ -6,23 +6,34 @@ Strona wewnętrzna. Akcja kawowa - losowanie osoby kupującej kawę.
 
 ```
 app/
-├── index.html    ← struktura strony (1 plik, tylko <div id="app">)
-├── style.css     ← wszystkie style,
-├── app.js        ← cała logika,
-└── data.json     ← stan: zespół, rundy, zakupy, oceny
+├── index.html          ← struktura strony (1 plik, tylko <div id="app">)
+├── style.css           ← wszystkie style, komentarze z numerami sekcji
+└── js/                 ← logika, jako natywne ES modules (bez bundlera)
+    ├── supabase.js      konfiguracja + REST helpers (sb.get/post/patch/uploadPhoto)
+    ├── state.js         stan aplikacji (state) + loadData() z Supabase
+    ├── helpers.js        selektory/pomocnicze funkcje czyste (memberById, inGame, rankedCoffees...)
+    ├── render-tabs.js    renderery 5 zakładek (Losowanie/Zespół/Historia/Statystyki/Ranking)
+    ├── render-modals.js  renderery modali (zakup, ocena, karta kawy, dodaj/edytuj uczestnika)
+    ├── render.js         render() główny + topbar/tabs/routing zakładek
+    ├── animations.js     bęben losowania, Giphy, konfetti
+    ├── toast.js          powiadomienia na dole ekranu
+    ├── actions.js        akcje zapisu do Supabase (savePurchase, saveRating, startDraw...)
+    ├── events.js         attachEvents() — podpięcie handlerów po każdym renderze
+    └── main.js           punkt wejścia (init → loadData → render)
 ```
 
 ### `index.html`
-Wciąga `style.css` i `app.js`. Cała strona jest budowana w JavaScripcie.
+Wciąga `style.css` i ładuje `js/main.js` jako `<script type="module">`. Cała strona jest budowana w JavaScripcie.
 
-### `style.css` 
+Brak bundlera — moduły importują się nawzajem po względnych ścieżkach (`import ... from './helpers.js?v=...'`).
+Parametr `?v=` służy do omijania cache przeglądarki; przy każdej zmianie kodu trzeba go
+zbiorczo podbić w `index.html` **i** we wszystkich `import` w plikach `js/*.js` (szukaj `?v=20260728`).
+
+### `style.css`
 Komentarze z numerami sekcji.
 
-### `app.js`
-KOoentarze znumerami sekcji.
-
 ### `data.json`
-Cały stan strony. 
+Nieaktualne — stan trzymany jest teraz w Supabase (patrz `js/supabase.js`), nie w `data.json`.
 
 ## Co do dorobienia
 
