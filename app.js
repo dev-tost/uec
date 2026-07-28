@@ -179,6 +179,10 @@ function purchaseForDraw(drawId) {
   return state.data.purchases.find(p => p.drawId === drawId);
 }
 
+function drawForPurchase(purchase) {
+  return state.data.rounds.flatMap(r => r.draws).find(d => d.id === purchase.drawId);
+}
+
 function myRatingForPurchase(purchaseId) {
   return state.data.ratings.find(r => r.purchaseId === purchaseId && r.memberId === state.whoAmI);
 }
@@ -554,7 +558,15 @@ function renderStatystyki() {
   const total = purchases.reduce((s, p) => s + p.price, 0);
   const avg = total / purchases.length;
   const ratings = state.data.ratings;
-  const avgRating = ratings.length ? ratings.reduce((s, r) => s + r.score, 0) / ratings.length : 0;
+  const avgRating = ratings.length ? ratings.reduce((s, r) => s + r.score, 0) / ratings.length : null;
+  const purchaseYears = [...new Set(
+    purchases.map(p => drawForPurchase(p)?.date).filter(Boolean).map(d => new Date(d).getFullYear())
+  )];
+  const yearLabel = purchaseYears.length === 0
+    ? 'łącznie'
+    : purchaseYears.length === 1
+      ? `rok ${purchaseYears[0]}`
+      : `${Math.min(...purchaseYears)}–${Math.max(...purchaseYears)}`;
   const minP = Math.min(...purchases.map(p => p.price));
   const maxP = Math.max(...purchases.map(p => p.price));
   const cupsPerKg = 140;
@@ -570,7 +582,7 @@ function renderStatystyki() {
       <div class="kpi accent">
         <div class="label">łącznie wydane</div>
         <div class="value">${total} zł</div>
-        <div class="sub">rok 2026</div>
+        <div class="sub">${yearLabel}</div>
       </div>
       <div class="kpi">
         <div class="label">zakupów</div>
@@ -584,7 +596,7 @@ function renderStatystyki() {
       </div>
       <div class="kpi">
         <div class="label">średnia ocen</div>
-        <div class="value">${avgRating.toFixed(1)}</div>
+        <div class="value">${avgRating !== null ? avgRating.toFixed(1) : '—'}</div>
         <div class="sub">/ 10</div>
       </div>
       <div class="kpi accent">
@@ -603,12 +615,12 @@ function renderStatystyki() {
         <div class="value">${best.score.toFixed(1)}</div>
         <div class="sub">${best.brand}</div>
       </div>
+      ` : ''}
       <div class="kpi">
         <div class="label">koszt / filiżanka</div>
         <div class="value">${(total / cups).toFixed(2)} zł</div>
         <div class="sub">średnio</div>
       </div>
-      ` : ''}
     </div>
   `;
 }
