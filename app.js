@@ -115,6 +115,14 @@ const uid = () => Math.random().toString(36).slice(2, 10);
 const buyVerb = (member) => member?.gender === 'M' ? 'kupił' : 'kupiła';
 const emptyState = (text) => `<div class="mono" style="padding:40px;text-align:center">${text}</div>`;
 
+function ocenLabel(n) {
+  if (n === 1) return 'ocena';
+  const lastDigit = n % 10;
+  const lastTwo = n % 100;
+  if (lastDigit >= 2 && lastDigit <= 4 && !(lastTwo >= 12 && lastTwo <= 14)) return 'oceny';
+  return 'ocen';
+}
+
 function daysAgo(dateStr) {
   const diff = Math.floor((Date.now() - new Date(dateStr)) / 86400000);
   if (diff === 0) return 'dziś';
@@ -311,7 +319,7 @@ function renderDrawIdle() {
             <div class="mono" style="color:var(--coffee); margin-bottom:14px">twoja kolej · runda ${state.data.currentRound}</div>
             <div class="my-turn-headline">${memberById(state.whoAmI)?.name}!</div>
             <div class="my-turn-sub">wylosowano Cię ${daysAgo(myDraw.date)}${remaining > 0 ? ` · zostało Ci ${remaining} ${remaining === 1 ? 'dzień' : 'dni'}` : ''}</div>
-            <button class="btn btn-primary my-turn-btn" id="btn-my-turn-register">📷 zarejestruj zakup</button>
+            <button class="btn btn-primary my-turn-btn" id="btn-my-turn-register">📷 Zarejestruj zakup</button>
                       <div class="my-turn-footer mono">kolejne losowanie odblokuje się po zarejestrowaniu zakupu</div>
           </div>
         ` : canDraw
@@ -454,7 +462,7 @@ function renderDrawResult() {
         <span class="mono">ładuję mem...</span>
       </div>
       <div class="result-actions">
-        <button class="btn btn-ghost" id="btn-back">← powrót</button>
+        <button class="btn btn-ghost" id="btn-back">← Powrót</button>
       </div>
     </div>
   `;
@@ -467,7 +475,7 @@ function renderZespol() {
   return `
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
       <h2>Zespół (${active.length})</h2>
-      <button class="btn btn-primary" id="btn-open-add-member">+ dodaj uczestnika</button>
+      <button class="btn btn-primary" id="btn-open-add-member">+ Dodaj uczestnika</button>
     </div>
     ${active.length === 0 ? emptyState('brak uczestników') : `
     <table class="data">
@@ -563,7 +571,7 @@ function renderStatystyki() {
     purchases.map(p => drawForPurchase(p)?.date).filter(Boolean).map(d => new Date(d).getFullYear())
   )];
   const yearLabel = purchaseYears.length === 0
-    ? 'łącznie'
+    ? '—'
     : purchaseYears.length === 1
       ? `rok ${purchaseYears[0]}`
       : `${Math.min(...purchaseYears)}–${Math.max(...purchaseYears)}`;
@@ -586,7 +594,7 @@ function renderStatystyki() {
       </div>
       <div class="kpi">
         <div class="label">zakupów</div>
-        <div class="value">${purchases.length}×</div>
+        <div class="value">${purchases.length}</div>
         <div class="sub">1kg każdy</div>
       </div>
       <div class="kpi">
@@ -602,7 +610,7 @@ function renderStatystyki() {
       <div class="kpi accent">
         <div class="label">filiżanki</div>
         <div class="value">${cups}</div>
-        <div class="sub">~${cupsPerKg} espresso / 1kg</div>
+        <div class="sub">~${cupsPerKg} filiżanek / 1kg</div>
       </div>
       <div class="kpi">
         <div class="label">najdroższa</div>
@@ -630,12 +638,12 @@ function coffeeMeta(c) {
   if (c.purchases.length === 1) {
     const draw = state.data.rounds.flatMap(r => r.draws).find(d => d.id === c.purchases[0].drawId);
     const buyer = memberById(draw.memberId);
-    return `${buyer.name} · ${c.purchases[0].price} zł · ${c.votes} ocen`;
+    return `${buyer.name} · ${c.purchases[0].price} zł · ${c.votes} ${ocenLabel(c.votes)}`;
   }
   const prices = c.purchases.map(p => p.price);
   const min = Math.min(...prices), max = Math.max(...prices);
   const priceText = min === max ? `${min} zł` : `${min}–${max} zł`;
-  return `${c.purchases.length}× kupione · ${priceText} · ${c.votes} ocen`;
+  return `${c.purchases.length}× kupione · ${priceText} · ${c.votes} ${ocenLabel(c.votes)}`;
 }
 
 function renderRanking() {
@@ -656,7 +664,7 @@ function renderRanking() {
       <h2>Ranking</h2>
       <button class="btn ${canRegister ? 'btn-primary' : 'btn-primary-disabled'}" id="btn-open-register"
         title="${canRegister ? '' : 'Rejestracja zakupu dostępna tylko dla wylosowanych uczestników w bieżącej rundzie'}">
-        + zarejestruj zakup
+        + Zarejestruj zakup
       </button>
     </div>
 
@@ -855,7 +863,7 @@ function renderModalCoffeeCard() {
             </div>
             <div class="coffee-card-score">
               <div class="value">${score !== null ? score.toFixed(1) : '—'}</div>
-              <div class="mono">${pooledRatings.length} ${pooledRatings.length === 1 ? 'ocena' : 'ocen'}</div>
+              <div class="mono">${pooledRatings.length} ${ocenLabel(pooledRatings.length)}</div>
             </div>
           </div>
 
@@ -870,7 +878,7 @@ function renderModalCoffeeCard() {
                 <div class="purchase-event-head">
                   <div class="avatar" style="width:32px; height:32px; font-size:12px">${initials(e.buyer?.name || '?')}</div>
                   <div class="purchase-event-info">
-                    <div>${e.buyer ? `${buyVerb(e.buyer)} ${e.buyer.name}` : 'nieznany'}</div>
+                    <div>${e.buyer ? `${e.buyer.name} ${buyVerb(e.buyer)}` : 'nieznany'}</div>
                     <div class="mono">${e.draw?.date || ''} · ${e.price} zł</div>
                   </div>
                   <div class="purchase-event-score">
@@ -1325,7 +1333,7 @@ async function saveNewMember() {
 
   const nameExists = state.data.team.some(p => p.name.toLowerCase() === name.toLowerCase());
   if (nameExists) {
-    alert(`„${name}" już jest w zespole.`);
+    alert(`„${name}” już jest w zespole.`);
     return;
   }
 
@@ -1375,7 +1383,7 @@ async function saveEditMember() {
 
   const nameExists = state.data.team.some(p => p.id !== memberId && p.name.toLowerCase() === name.toLowerCase());
   if (nameExists) {
-    alert(`„${name}" już jest w zespole.`);
+    alert(`„${name}” już jest w zespole.`);
     return;
   }
 
