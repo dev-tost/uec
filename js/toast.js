@@ -42,8 +42,8 @@ export function showToast(message, type = 'success', duration = 3000) {
   toast.textContent = message;
   document.body.appendChild(toast);
 
-  // getBoundingClientRect() wymusza reflow — element dostaje style spoczynkowe
-  // (opacity:0) zanim dodamy klasę; dzięki temu transition faktycznie startuje
+  // ta linijka zmusza przeglądarkę, żeby najpierw "zauważyła" ukryty stan toasta,
+  // zanim włączymy klasę, która go pokazuje — inaczej animacja pojawienia się by nie zadziałała
   toast.getBoundingClientRect();
   toast.classList.add('ak-toast-visible');
 

@@ -6,20 +6,20 @@ Strona wewnętrzna. Akcja kawowa - losowanie osoby kupującej kawę.
 
 ```
 app/
-├── index.html          ← struktura strony (1 plik, tylko <div id="app">)
-├── style.css           ← wszystkie style, komentarze z numerami sekcji
-└── js/                 ← logika, jako natywne ES modules (bez bundlera)
-    ├── supabase.js      konfiguracja + REST helpers (sb.get/post/patch/uploadPhoto)
-    ├── state.js         stan aplikacji (state) + loadData() z Supabase
-    ├── helpers.js        selektory/pomocnicze funkcje czyste (memberById, inGame, rankedCoffees...)
-    ├── render-tabs.js    renderery 5 zakładek (Losowanie/Zespół/Historia/Statystyki/Ranking)
-    ├── render-modals.js  renderery modali (zakup, ocena, karta kawy, dodaj/edytuj uczestnika)
-    ├── render.js         render() główny + topbar/tabs/routing zakładek
-    ├── animations.js     bęben losowania, Giphy, konfetti
-    ├── toast.js          powiadomienia na dole ekranu
-    ├── actions.js        akcje zapisu do Supabase (savePurchase, saveRating, startDraw...)
-    ├── events.js         attachEvents() — podpięcie handlerów po każdym renderze
-    └── main.js           punkt wejścia (init → loadData → render)
+├── index.html          ← cała struktura strony (jeden plik, prawie pusty — resztę dorysowuje JavaScript)
+├── style.css           ← wszystkie style, poukładane w sekcje
+└── js/                 ← logika strony, podzielona na pliki (bez żadnego bundlera/build-toola)
+    ├── supabase.js       łączy się z bazą danych Supabase — pobiera i zapisuje dane oraz zdjęcia
+    ├── state.js          trzyma aktualny stan aplikacji i wczytuje dane z Supabase przy starcie
+    ├── helpers.js        drobne funkcje pomocnicze (np. znajdź osobę po ID, kto gra w tej rundzie, ranking kaw)
+    ├── render-tabs.js    rysuje 5 zakładek (Losowanie/Zespół/Historia/Statystyki/Ranking)
+    ├── render-modals.js  rysuje okienka (zakup, ocena, karta kawy, dodaj/edytuj uczestnika)
+    ├── render.js         główna funkcja rysująca stronę — pasek u góry, zakładki i to co aktualnie wybrane
+    ├── animations.js     animacja losowania (bęben), losowy gif z Giphy, konfetti
+    ├── toast.js          małe powiadomienia na dole ekranu (np. "zapisano")
+    ├── actions.js        wszystko, co zapisuje dane do Supabase (nowy zakup, ocena, losowanie...)
+    ├── events.js         podpina obsługę kliknięć pod przyciski — uruchamia się po każdym rysowaniu strony
+    └── main.js           punkt startowy: wczytaj dane, narysuj stronę
 ```
 
 ### `index.html`
@@ -58,7 +58,7 @@ Zarys (do zaimplementowania w kolejnym kroku):
 Plik `data.json` w repo staje się "bazą danych". Każda zmiana = git commit. Historia commitów = audyt.
 
 
-## Wyglądu
+## Wygląd
 
 Wszystkie kolory są zmiennymi CSS na górze `style.css` (sekcja 1):
 

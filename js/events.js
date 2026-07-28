@@ -98,7 +98,7 @@ export function attachEvents() {
     };
   });
 
-  // komentarz do oceny (bez pełnego re-render, żeby nie tracić focusu przy pisaniu)
+  // komentarz do oceny — nie przerysowujemy całego widoku, żeby pole nie straciło fokusu podczas pisania
   const ratingComment = $('#f-rating-comment');
   if (ratingComment) ratingComment.oninput = (e) => {
     state.modalData.comment = e.target.value;
@@ -127,8 +127,8 @@ export function attachEvents() {
     };
   });
 
-  // marka/odmiana w formularzu zakupu — przełącz wymagalność zdjęcia dla znanej kawy
-  // (bez pełnego re-render, żeby nie tracić focusu przy pisaniu)
+  // marka/odmiana w formularzu zakupu — jeśli to znana kawa, zdjęcie przestaje być wymagane
+  // (nie przerysowujemy całego widoku, żeby pole nie straciło fokusu podczas pisania)
   const updatePhotoRequirement = () => {
     const brand = $('#f-brand')?.value?.trim().toLowerCase();
     const variety = $('#f-variety')?.value?.trim().toLowerCase();

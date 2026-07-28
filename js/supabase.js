@@ -10,7 +10,7 @@ const headers = {
   'Prefer': 'return=representation',
 };
 
-/* Supabase REST helpers */
+/* funkcje do rozmowy z Supabase — pobieranie i zapisywanie danych oraz zdjęć */
 export const sb = {
   async get(table, params = '') {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, { headers });

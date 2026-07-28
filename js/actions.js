@@ -30,7 +30,7 @@ export async function startDraw() {
     });
     // użyj ID z bazy (może się różnić od lokalnie wygenerowanego)
     const actualDrawId = (Array.isArray(savedDraw) ? savedDraw[0] : savedDraw)?.id ?? drawId;
-    // dodaj lokalnie (bez reloadu, żeby nie przerywać animacji)
+    // dodaj lokalnie (bez przeładowania strony, żeby nie przerywać animacji)
     let currentRoundObj = state.data.rounds.find(r => r.number === state.data.currentRound);
     if (!currentRoundObj) {
       currentRoundObj = { number: state.data.currentRound, draws: [] };
@@ -242,7 +242,7 @@ export async function deactivateMember(memberId) {
   if (!member) return;
   if (!confirm(`Usunąć ${member.name} z zespołu? Osoba zniknie z losowania, ale historia pozostanie.`)) return;
 
-  // optymistyczna aktualizacja
+  // zmieniamy od razu na ekranie, nie czekając na odpowiedź serwera
   member.active = false;
   render();
 
@@ -278,7 +278,7 @@ export async function togglePresence(memberId, isOff) {
   const member = memberById(memberId);
   if (!member) return;
 
-  // optymistyczna aktualizacja UI
+  // zmieniamy od razu na ekranie, nie czekając na odpowiedź serwera
   member.today_off = isOff;
   render();
 
