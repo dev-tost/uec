@@ -1,5 +1,5 @@
 import { state } from './state.js?v=202607291634';
-import { $, initials, memberById, inGame } from './helpers.js?v=202607291634';
+import { $, initials, inGame } from './helpers.js?v=202607291634';
 import {
   renderLosowanie, renderZespol, renderHistoria, renderStatystyki, renderRanking,
 } from './render-tabs.js?v=202607291634';
@@ -49,7 +49,6 @@ function renderWhoAmI() {
 }
 
 function renderTopbar() {
-  const me = memberById(state.whoAmI);
   return `
     <div class="topbar">
       <div class="brand">

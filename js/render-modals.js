@@ -24,7 +24,6 @@ export function renderModal() {
 }
 
 function renderModalPurchase() {
-  const drawId = state.modalData.drawId || '';
   return `
     <div class="modal-overlay" id="modal-overlay">
       <div class="modal">

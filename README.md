@@ -47,6 +47,17 @@ buckecie `coffee-photos` (upload przez `sb.uploadPhoto()`).
 Przy pierwszym wejściu użytkownik wybiera siebie z listy zespołu — wybór zapamiętywany jest w `localStorage`
 (`akcja-kawowa-who`). Na tej podstawie strona wie, kto aktualnie ocenia kawę / czyja jest kolej (patrz `state.whoAmI`).
 
+## Narzędzia deweloperskie
+
+Wymaga `npm install` (tylko narzędzia jakości kodu, apka nadal działa bez żadnego builda).
+
+```
+npm run lint          sprawdza kod pod kątem błędów (ESLint)
+npm run format         formatuje wszystkie pliki (Prettier)
+npm run format:check   sprawdza formatowanie bez zmieniania plików
+npm run bump-version   podbija cache-busting (patrz wyżej)
+```
+
 ## Wygląd
 
 Wszystkie kolory są zmiennymi CSS na górze `style.css` (sekcja 1):
