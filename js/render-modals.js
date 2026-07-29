@@ -5,6 +5,15 @@ import {
 } from './helpers.js?v=202607291634';
 
 /* ---------- MODALE ---------- */
+function fieldError(key) {
+  const msg = state.modalData.errors?.[key];
+  return msg ? `<div class="field-error">${msg}</div>` : '';
+}
+
+function errorClass(key) {
+  return state.modalData.errors?.[key] ? 'field-input-error' : '';
+}
+
 export function renderModal() {
   if (state.modal === 'purchase')   return renderModalPurchase();
   if (state.modal === 'rating')     return renderModalRating();
@@ -25,23 +34,27 @@ function renderModalPurchase() {
         </div>
         <div class="modal-body">
           <label class="field-label">Palarnia / marka</label>
-          <input class="field-input" id="f-brand" list="coffee-brands" placeholder="np. HAYB, La Pajura..." />
+          <input class="field-input ${errorClass('brand')}" id="f-brand" value="${state.modalData.brand || ''}" list="coffee-brands" placeholder="np. HAYB, La Pajura..." />
           <datalist id="coffee-brands">
             ${[...new Set(state.data.coffees.map(c => c.brand))].map(b => `<option value="${b}">`).join('')}
           </datalist>
+          ${fieldError('brand')}
 
           <label class="field-label">Odmiana</label>
-          <input class="field-input" id="f-variety" list="coffee-varieties" placeholder="np. Etiopia Sidamo" />
+          <input class="field-input ${errorClass('variety')}" id="f-variety" value="${state.modalData.variety || ''}" list="coffee-varieties" placeholder="np. Etiopia Sidamo" />
           <datalist id="coffee-varieties">
             ${[...new Set(state.data.coffees.map(c => c.variety))].map(v => `<option value="${v}">`).join('')}
           </datalist>
+          ${fieldError('variety')}
 
           <label class="field-label">Cena (zł)</label>
-          <input class="field-input" id="f-price" type="number" placeholder="np. 79" />
+          <input class="field-input ${errorClass('price')}" id="f-price" type="number" value="${state.modalData.price || ''}" placeholder="np. 79" />
+          ${fieldError('price')}
 
           <label class="field-label">Zdjęcie opakowania <span id="photo-required-hint">*</span></label>
-          <input class="field-input" id="f-photo" type="file" accept="image/*" />
+          <input class="field-input ${errorClass('photo')}" id="f-photo" type="file" accept="image/*" />
           <div class="mono" id="photo-hint" style="margin-top:4px; color:var(--ink-soft)"></div>
+          ${fieldError('photo')}
 
           ${state.saving ? '<div class="mono" style="color:var(--coffee); margin-top:8px">zapisuję...</div>' : ''}
         </div>
@@ -200,20 +213,21 @@ function renderModalAddMember() {
         </div>
         <div class="modal-body">
           <label class="field-label">Imię</label>
-          <input class="field-input" id="f-member-name" placeholder="np. Zosia" autocomplete="off" />
+          <input class="field-input ${errorClass('name')}" id="f-member-name" value="${state.modalData.name || ''}" placeholder="np. Zosia" autocomplete="off" />
+          ${fieldError('name')}
 
           <label class="field-label">Płeć</label>
           <div style="display:flex; gap:8px; margin-bottom:12px">
             <label style="display:flex; align-items:center; gap:6px; cursor:pointer">
-              <input type="radio" name="f-gender" value="K" checked /> Kobieta
+              <input type="radio" name="f-gender" value="K" ${(state.modalData.gender || 'K') === 'K' ? 'checked' : ''} /> Kobieta
             </label>
             <label style="display:flex; align-items:center; gap:6px; cursor:pointer">
-              <input type="radio" name="f-gender" value="M" /> Mężczyzna
+              <input type="radio" name="f-gender" value="M" ${state.modalData.gender === 'M' ? 'checked' : ''} /> Mężczyzna
             </label>
           </div>
 
           <label class="field-label">Ulubiona kawa</label>
-          <input class="field-input" id="f-member-drink" placeholder="np. flat white, espresso..." />
+          <input class="field-input" id="f-member-drink" value="${state.modalData.drink || ''}" placeholder="np. flat white, espresso..." />
 
           ${state.saving ? '<div class="mono" style="color:var(--coffee); margin-top:8px">zapisuję...</div>' : ''}
         </div>
@@ -240,20 +254,21 @@ function renderModalEditMember() {
         </div>
         <div class="modal-body">
           <label class="field-label">Imię</label>
-          <input class="field-input" id="f-edit-member-name" value="${member.name}" autocomplete="off" />
+          <input class="field-input ${errorClass('name')}" id="f-edit-member-name" value="${state.modalData.name ?? member.name}" autocomplete="off" />
+          ${fieldError('name')}
 
           <label class="field-label">Płeć</label>
           <div style="display:flex; gap:8px; margin-bottom:12px">
             <label style="display:flex; align-items:center; gap:6px; cursor:pointer">
-              <input type="radio" name="f-edit-gender" value="K" ${member.gender === 'K' ? 'checked' : ''} /> Kobieta
+              <input type="radio" name="f-edit-gender" value="K" ${(state.modalData.gender ?? member.gender) === 'K' ? 'checked' : ''} /> Kobieta
             </label>
             <label style="display:flex; align-items:center; gap:6px; cursor:pointer">
-              <input type="radio" name="f-edit-gender" value="M" ${member.gender === 'M' ? 'checked' : ''} /> Mężczyzna
+              <input type="radio" name="f-edit-gender" value="M" ${(state.modalData.gender ?? member.gender) === 'M' ? 'checked' : ''} /> Mężczyzna
             </label>
           </div>
 
           <label class="field-label">Ulubiona kawa</label>
-          <input class="field-input" id="f-edit-member-drink" value="${member.drink}" placeholder="np. flat white, espresso..." />
+          <input class="field-input" id="f-edit-member-drink" value="${state.modalData.drink ?? member.drink}" placeholder="np. flat white, espresso..." />
 
           ${state.saving ? '<div class="mono" style="color:var(--coffee); margin-top:8px">zapisuję...</div>' : ''}
         </div>

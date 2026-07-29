@@ -44,24 +44,29 @@ export async function startDraw() {
 }
 
 export async function savePurchase() {
-  const brand   = $('#f-brand')?.value?.trim();
-  const variety = $('#f-variety')?.value?.trim();
-  const price   = parseInt($('#f-price')?.value);
+  const brand    = $('#f-brand')?.value?.trim();
+  const variety  = $('#f-variety')?.value?.trim();
+  const priceRaw = $('#f-price')?.value;
+  const price    = parseInt(priceRaw, 10);
   const fileInput = $('#f-photo');
   const file    = fileInput?.files?.[0];
   const drawId  = state.modalData.drawId;
 
-  if (!brand || !variety || !price || !drawId) {
-    alert('Uzupełnij markę, odmianę i cenę.');
-    return;
-  }
-
-  const existingCoffee = state.data.coffees.find(c =>
+  const existingCoffee = brand && variety && state.data.coffees.find(c =>
     c.brand.trim().toLowerCase() === brand.toLowerCase() &&
     c.variety.trim().toLowerCase() === variety.toLowerCase());
 
-  if (!existingCoffee && !file) {
-    alert('Dodaj zdjęcie opakowania (nowa kawa).');
+  const errors = {};
+  if (!brand) errors.brand = 'Podaj markę.';
+  if (!variety) errors.variety = 'Podaj odmianę.';
+  if (!priceRaw || isNaN(price) || price <= 0) errors.price = 'Podaj poprawną cenę.';
+  if (!existingCoffee && !file && !errors.brand && !errors.variety) {
+    errors.photo = 'Dodaj zdjęcie opakowania (nowa kawa).';
+  }
+
+  if (Object.keys(errors).length > 0) {
+    Object.assign(state.modalData, { errors, brand, variety, price: priceRaw });
+    render();
     return;
   }
 
@@ -108,8 +113,8 @@ export async function savePurchase() {
   } catch (err) {
     console.error('Błąd zapisu zakupu:', err);
     state.saving = false;
-    alert('Błąd zapisu: ' + err.message);
     render();
+    showToast('Błąd zapisu: ' + err.message, 'error');
   }
 }
 
@@ -141,24 +146,27 @@ export async function saveRating() {
   } catch (err) {
     console.error('Błąd zapisu oceny:', err);
     state.saving = false;
-    alert('Błąd zapisu: ' + err.message);
     render();
+    showToast('Błąd zapisu: ' + err.message, 'error');
   }
 }
 
 export async function saveNewMember() {
-  const name   = $('#f-member-name')?.value?.trim();
-  const drink  = $('#f-member-drink')?.value?.trim() || 'kawa';
-  const gender = document.querySelector('input[name="f-gender"]:checked')?.value || 'K';
+  const name      = $('#f-member-name')?.value?.trim();
+  const drinkRaw  = $('#f-member-drink')?.value?.trim();
+  const drink     = drinkRaw || 'kawa';
+  const gender    = document.querySelector('input[name="f-gender"]:checked')?.value || 'K';
 
   if (!name) {
-    alert('Wpisz imię uczestnika.');
+    Object.assign(state.modalData, { errors: { name: 'Wpisz imię uczestnika.' }, name, drink: drinkRaw, gender });
+    render();
     return;
   }
 
   const nameExists = state.data.team.some(p => p.name.toLowerCase() === name.toLowerCase());
   if (nameExists) {
-    alert(`„${name}” już jest w zespole.`);
+    Object.assign(state.modalData, { errors: { name: `„${name}” już jest w zespole.` }, name, drink: drinkRaw, gender });
+    render();
     return;
   }
 
@@ -187,8 +195,8 @@ export async function saveNewMember() {
   } catch (err) {
     console.error('Błąd zapisu uczestnika:', err);
     state.saving = false;
-    alert('Błąd zapisu: ' + err.message);
     render();
+    showToast('Błąd zapisu: ' + err.message, 'error');
   }
 }
 
@@ -197,18 +205,21 @@ export async function saveEditMember() {
   const member = memberById(memberId);
   if (!member) return;
 
-  const name   = $('#f-edit-member-name')?.value?.trim();
-  const drink  = $('#f-edit-member-drink')?.value?.trim() || 'kawa';
-  const gender = document.querySelector('input[name="f-edit-gender"]:checked')?.value || 'K';
+  const name      = $('#f-edit-member-name')?.value?.trim();
+  const drinkRaw  = $('#f-edit-member-drink')?.value?.trim();
+  const drink     = drinkRaw || 'kawa';
+  const gender    = document.querySelector('input[name="f-edit-gender"]:checked')?.value || 'K';
 
   if (!name) {
-    alert('Wpisz imię uczestnika.');
+    Object.assign(state.modalData, { errors: { name: 'Wpisz imię uczestnika.' }, name, drink: drinkRaw, gender });
+    render();
     return;
   }
 
   const nameExists = state.data.team.some(p => p.id !== memberId && p.name.toLowerCase() === name.toLowerCase());
   if (nameExists) {
-    alert(`„${name}” już jest w zespole.`);
+    Object.assign(state.modalData, { errors: { name: `„${name}” już jest w zespole.` }, name, drink: drinkRaw, gender });
+    render();
     return;
   }
 
@@ -232,8 +243,8 @@ export async function saveEditMember() {
   } catch (err) {
     console.error('Błąd edycji uczestnika:', err);
     state.saving = false;
-    alert('Błąd zapisu: ' + err.message);
     render();
+    showToast('Błąd zapisu: ' + err.message, 'error');
   }
 }
 
@@ -252,7 +263,7 @@ export async function deactivateMember(memberId) {
     console.error('Błąd dezaktywacji:', err);
     member.active = true;
     render();
-    alert('Błąd: ' + err.message);
+    showToast('Błąd: ' + err.message, 'error');
   }
 }
 
@@ -270,7 +281,7 @@ export async function startNewRound() {
     render();
   } catch (err) {
     console.error('Błąd tworzenia nowej rundy:', err);
-    alert('Błąd: ' + err.message);
+    showToast('Błąd: ' + err.message, 'error');
   }
 }
 
