@@ -1,9 +1,9 @@
-import { state } from './state.js?v=20260728';
+import { state } from './state.js?v=202607291634';
 import {
   initials, memberById, coffeeById, daysAgo, paidThisRound, inGame, out, ho,
   emptyState, avgScore, purchaseForDraw, drawForPurchase, rankedCoffees,
   coffeeScore, ocenLabel, myRatingForPurchase,
-} from './helpers.js?v=20260728';
+} from './helpers.js?v=202607291634';
 
 /* ---------- ZAKŁADKA: LOSOWANIE ---------- */
 export function renderLosowanie() {

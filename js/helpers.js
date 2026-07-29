@@ -1,4 +1,4 @@
-import { state } from './state.js?v=20260728';
+import { state } from './state.js?v=202607291634';
 
 /* ---------- POMOCNICZE FUNKCJE ---------- */
 export const $ = (sel) => document.querySelector(sel);

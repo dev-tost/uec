@@ -1,10 +1,10 @@
-import { state } from './state.js?v=20260728';
-import { $, purchaseForDraw } from './helpers.js?v=20260728';
-import { render } from './render.js?v=20260728';
+import { state } from './state.js?v=202607291634';
+import { $, purchaseForDraw } from './helpers.js?v=202607291634';
+import { render } from './render.js?v=202607291634';
 import {
   startDraw, savePurchase, saveRating, saveNewMember,
   saveEditMember, deactivateMember, startNewRound, togglePresence,
-} from './actions.js?v=20260728';
+} from './actions.js?v=202607291634';
 
 /* ---------- EVENTY ---------- */
 export function attachEvents() {

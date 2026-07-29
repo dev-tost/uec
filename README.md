@@ -26,7 +26,11 @@ Wciąga `style.css` i ładuje `js/main.js` jako `<script type="module">`. Cała 
 
 Brak bundlera — moduły importują się nawzajem po względnych ścieżkach (`import ... from './helpers.js?v=...'`).
 Parametr `?v=` służy do omijania cache przeglądarki; przy każdej zmianie kodu trzeba go
-zbiorczo podbić w `index.html` **i** we wszystkich `import` w plikach `js/*.js` (szukaj `?v=20260728`).
+zbiorczo podbić w `index.html` **i** we wszystkich `import` w plikach `js/*.js`. Robi to automatycznie:
+
+```
+node scripts/bump-cache-version.js
+```
 
 ### `style.css`
 Komentarze z numerami sekcji.

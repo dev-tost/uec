@@ -1,8 +1,8 @@
-import { state } from './state.js?v=20260728';
+import { state } from './state.js?v=202607291634';
 import {
   coffeeById, memberById, initials, buyVerb, avgScore,
   purchasesForCoffee, myRatingForPurchase, ocenLabel,
-} from './helpers.js?v=20260728';
+} from './helpers.js?v=202607291634';
 
 /* ---------- MODALE ---------- */
 export function renderModal() {
