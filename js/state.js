@@ -1,4 +1,4 @@
-import { sb } from './supabase.js?v=202607291634';
+import { sb } from './supabase.js?v=202607311530';
 
 /* ---------- STAN APLIKACJI ---------- */
 export const state = {
@@ -29,26 +29,35 @@ export async function loadData() {
     activeRounds = Array.isArray(created) ? created : [created];
   }
 
-  const currentRound = activeRounds.find(r => r.is_current);
+  const currentRound = activeRounds.find((r) => r.is_current);
 
   // normalizujemy do struktury podobnej do data.json
   state.data = {
     team,
     currentRound: currentRound?.number ?? 1,
-    rounds: activeRounds.map(r => ({
+    rounds: activeRounds.map((r) => ({
       number: r.number,
       draws: draws
-        .filter(d => d.round_number === r.number)
-        .map(d => ({ id: d.id, memberId: d.member_id, date: d.draw_date })),
+        .filter((d) => d.round_number === r.number)
+        .map((d) => ({ id: d.id, memberId: d.member_id, date: d.draw_date })),
     })),
-    coffees: coffees.map(c => ({
-      id: c.id, brand: c.brand, variety: c.variety, photo: c.photo_url,
+    coffees: coffees.map((c) => ({
+      id: c.id,
+      brand: c.brand,
+      variety: c.variety,
+      photo: c.photo_url,
     })),
-    purchases: purchases.map(p => ({
-      id: p.id, drawId: p.draw_id, coffeeId: p.coffee_id, price: p.price,
+    purchases: purchases.map((p) => ({
+      id: p.id,
+      drawId: p.draw_id,
+      coffeeId: p.coffee_id,
+      price: p.price,
     })),
-    ratings: ratings.map(r => ({
-      purchaseId: r.purchase_id, memberId: r.member_id, score: r.score, comment: r.comment ?? null,
+    ratings: ratings.map((r) => ({
+      purchaseId: r.purchase_id,
+      memberId: r.member_id,
+      score: r.score,
+      comment: r.comment ?? null,
     })),
   };
 }

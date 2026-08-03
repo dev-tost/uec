@@ -1,6 +1,6 @@
-import { state } from './state.js?v=202607291634';
-import { $, inGame } from './helpers.js?v=202607291634';
-import { render } from './render.js?v=202607291634';
+import { state } from './state.js?v=202607311530';
+import { $, inGame } from './helpers.js?v=202607311530';
+import { render } from './render.js?v=202607311530';
 
 /* ---------- ANIMACJA LOSOWANIA ---------- */
 export function animateReel(winner) {
@@ -12,12 +12,12 @@ export function animateReel(winner) {
 
   const itemWidth = 60 + items[0].offsetWidth;
   const players = inGame();
-  const winnerIdx = players.findIndex(p => p.id === winner.id);
+  const winnerIdx = players.findIndex((p) => p.id === winner.id);
   const targetIdx = players.length * 2 + winnerIdx;
 
   const reel = track.parentElement;
   const reelCenter = reel.offsetWidth / 2;
-  const targetX = (targetIdx * itemWidth) + items[0].offsetWidth / 2 - reelCenter;
+  const targetX = targetIdx * itemWidth + items[0].offsetWidth / 2 - reelCenter;
 
   let start = null;
   const duration = 3500;
@@ -28,14 +28,15 @@ export function animateReel(winner) {
     if (!start) start = timestamp;
     const elapsed = timestamp - start;
     const progress = Math.min(elapsed / duration, 1);
-    const eased = progress < settleAt
-      ? (progress / settleAt) * 0.6
-      : 0.6 + 0.4 * (1 - Math.pow(1 - (progress - settleAt) / (1 - settleAt), 3));
+    const eased =
+      progress < settleAt
+        ? (progress / settleAt) * 0.6
+        : 0.6 + 0.4 * (1 - Math.pow(1 - (progress - settleAt) / (1 - settleAt), 3));
     const x = -targetX * eased;
     track.style.transform = `translateX(${x}px)`;
 
     items.forEach((el, i) => {
-      const elCenter = (i * itemWidth) + items[0].offsetWidth / 2 + x;
+      const elCenter = i * itemWidth + items[0].offsetWidth / 2 + x;
       const dist = Math.abs(elCenter - reelCenter);
       const closeness = progress < settleAt ? 0 : Math.max(0, 1 - dist / 200);
       el.style.opacity = 0.3 + closeness * 0.7;
@@ -65,7 +66,9 @@ async function loadGif() {
   const tags = ['coffee', 'celebration', 'drama', 'wow'];
   const tag = tags[Math.floor(Math.random() * tags.length)];
   try {
-    const res = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${KEY}&tag=${tag}&rating=g`);
+    const res = await fetch(
+      `https://api.giphy.com/v1/gifs/random?api_key=${KEY}&tag=${tag}&rating=g`,
+    );
     const json = await res.json();
     const url = json.data?.images?.fixed_height?.url;
     if (url) slot.innerHTML = `<img src="${url}" alt="mem"/>`;
@@ -79,7 +82,7 @@ async function loadGif() {
 function spawnConfetti() {
   const stage = $('#result-stage');
   if (!stage) return;
-  const colors = ['#030213','#1b1b1f','#e9ebef','#d4183d','#717182'];
+  const colors = ['#22c55e', '#6ee7b7', '#ffffff', '#0b0a10', '#d4183d'];
   for (let i = 0; i < 30; i++) {
     const c = document.createElement('div');
     c.className = 'confetti';

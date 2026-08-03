@@ -10,7 +10,8 @@ const jsDir = path.join(root, 'js');
 
 const targets = [
   path.join(root, 'index.html'),
-  ...fs.readdirSync(jsDir)
+  ...fs
+    .readdirSync(jsDir)
     .filter((f) => f.endsWith('.js'))
     .map((f) => path.join(jsDir, f)),
 ];

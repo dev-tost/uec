@@ -1,8 +1,14 @@
-import { state } from './state.js?v=202607291634';
+import { state } from './state.js?v=202607311530';
 import {
-  coffeeById, memberById, initials, buyVerb, avgScore,
-  purchasesForCoffee, myRatingForPurchase, ocenLabel,
-} from './helpers.js?v=202607291634';
+  coffeeById,
+  memberById,
+  initials,
+  buyVerb,
+  avgScore,
+  purchasesForCoffee,
+  myRatingForPurchase,
+  ocenLabel,
+} from './helpers.js?v=202607311530';
 
 /* ---------- MODALE ---------- */
 function fieldError(key) {
@@ -15,9 +21,9 @@ function errorClass(key) {
 }
 
 export function renderModal() {
-  if (state.modal === 'purchase')   return renderModalPurchase();
-  if (state.modal === 'rating')     return renderModalRating();
-  if (state.modal === 'addMember')  return renderModalAddMember();
+  if (state.modal === 'purchase') return renderModalPurchase();
+  if (state.modal === 'rating') return renderModalRating();
+  if (state.modal === 'addMember') return renderModalAddMember();
   if (state.modal === 'editMember') return renderModalEditMember();
   if (state.modal === 'coffeeCard') return renderModalCoffeeCard();
   return '';
@@ -28,21 +34,21 @@ function renderModalPurchase() {
     <div class="modal-overlay" id="modal-overlay">
       <div class="modal">
         <div class="modal-header">
-          <h3>📷 Zarejestruj zakup</h3>
+          <h3>Zarejestruj zakup</h3>
           <button class="btn btn-ghost" id="modal-close">✕</button>
         </div>
         <div class="modal-body">
           <label class="field-label">Palarnia / marka</label>
-          <input class="field-input ${errorClass('brand')}" id="f-brand" value="${state.modalData.brand || ''}" list="coffee-brands" placeholder="np. HAYB, La Pajura..." />
+          <input class="field-input ${errorClass('brand')}" id="f-brand" value="${state.modalData.brand || ''}" list="coffee-brands" placeholder="np. HAYB" />
           <datalist id="coffee-brands">
-            ${[...new Set(state.data.coffees.map(c => c.brand))].map(b => `<option value="${b}">`).join('')}
+            ${[...new Set(state.data.coffees.map((c) => c.brand))].map((b) => `<option value="${b}">`).join('')}
           </datalist>
           ${fieldError('brand')}
 
           <label class="field-label">Odmiana</label>
           <input class="field-input ${errorClass('variety')}" id="f-variety" value="${state.modalData.variety || ''}" list="coffee-varieties" placeholder="np. Etiopia Sidamo" />
           <datalist id="coffee-varieties">
-            ${[...new Set(state.data.coffees.map(c => c.variety))].map(v => `<option value="${v}">`).join('')}
+            ${[...new Set(state.data.coffees.map((c) => c.variety))].map((v) => `<option value="${v}">`).join('')}
           </datalist>
           ${fieldError('variety')}
 
@@ -69,7 +75,7 @@ function renderModalPurchase() {
 }
 
 function renderModalRating() {
-  const purchase = state.data.purchases.find(p => p.id === state.modalData.purchaseId);
+  const purchase = state.data.purchases.find((p) => p.id === state.modalData.purchaseId);
   const coffee = coffeeById(purchase.coffeeId);
   const currentScore = state.modalData.score || 5;
   return `
@@ -84,9 +90,13 @@ function renderModalRating() {
           <div class="mono" style="margin-bottom:24px">${coffee.variety}</div>
 
           <div class="score-picker">
-            ${[1,2,3,4,5,6,7,8,9,10].map(n => `
+            ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+              .map(
+                (n) => `
               <button class="score-btn ${n === currentScore ? 'active' : ''}" data-score="${n}">${n}</button>
-            `).join('')}
+            `,
+              )
+              .join('')}
           </div>
           <div class="mono" style="margin-top:8px">wybrana ocena: <strong>${currentScore}</strong> / 10</div>
 
@@ -111,17 +121,21 @@ function renderModalCoffeeCard() {
   if (!coffee) return '';
 
   const events = purchasesForCoffee(coffee.id)
-    .map(p => {
-      const draw = state.data.rounds.flatMap(r => r.draws).find(d => d.id === p.drawId);
+    .map((p) => {
+      const draw = state.data.rounds.flatMap((r) => r.draws).find((d) => d.id === p.drawId);
       const buyer = draw ? memberById(draw.memberId) : null;
-      const ratings = state.data.ratings.filter(r => r.purchaseId === p.id).sort((a, b) => b.score - a.score);
+      const ratings = state.data.ratings
+        .filter((r) => r.purchaseId === p.id)
+        .sort((a, b) => b.score - a.score);
       return { ...p, draw, buyer, ratings, myRating: myRatingForPurchase(p.id) };
     })
     .sort((a, b) => new Date(b.draw?.date || 0) - new Date(a.draw?.date || 0));
 
-  const pooledRatings = events.flatMap(e => e.ratings);
-  const score = pooledRatings.length ? pooledRatings.reduce((s, r) => s + r.score, 0) / pooledRatings.length : null;
-  const anyNeedsRate = events.some(e => !e.myRating);
+  const pooledRatings = events.flatMap((e) => e.ratings);
+  const score = pooledRatings.length
+    ? pooledRatings.reduce((s, r) => s + r.score, 0) / pooledRatings.length
+    : null;
+  const anyNeedsRate = events.some((e) => !e.myRating);
 
   return `
     <div class="modal-overlay" id="modal-overlay">
@@ -152,9 +166,10 @@ function renderModalCoffeeCard() {
 
           <h3 style="margin-bottom:8px">Historia zakupów</h3>
           <div class="purchase-event-list">
-            ${events.map(e => {
-              const eventScore = avgScore(e.id);
-              return `
+            ${events
+              .map((e) => {
+                const eventScore = avgScore(e.id);
+                return `
               <div class="purchase-event">
                 <div class="purchase-event-head">
                   <div class="avatar" style="width:32px; height:32px; font-size:12px">${initials(e.buyer?.name || '?')}</div>
@@ -167,12 +182,14 @@ function renderModalCoffeeCard() {
                     ${!e.myRating ? `<button class="btn btn-primary" data-rate-purchase="${e.id}">Oceń</button>` : ''}
                   </div>
                 </div>
-                ${e.ratings.length === 0
-                  ? `<div class="mono" style="padding:6px 0">jeszcze nikt nie ocenił tego zakupu</div>`
-                  : `<div class="comment-list">
-                      ${e.ratings.map(r => {
-                        const m = memberById(r.memberId);
-                        return `
+                ${
+                  e.ratings.length === 0
+                    ? `<div class="mono" style="padding:6px 0">jeszcze nikt nie ocenił tego zakupu</div>`
+                    : `<div class="comment-list">
+                      ${e.ratings
+                        .map((r) => {
+                          const m = memberById(r.memberId);
+                          return `
                           <div class="comment-row">
                             <div class="avatar" style="width:32px; height:32px; font-size:12px">${initials(m?.name || '?')}</div>
                             <div class="comment-body">
@@ -180,18 +197,22 @@ function renderModalCoffeeCard() {
                                 <span class="comment-name">${m?.name || 'nieznany'}</span>
                                 <span class="comment-score">${r.score}/10</span>
                               </div>
-                              ${r.comment
-                                ? `<div class="comment-text">${r.comment}</div>`
-                                : `<div class="comment-text comment-empty">bez komentarza</div>`}
+                              ${
+                                r.comment
+                                  ? `<div class="comment-text">${r.comment}</div>`
+                                  : `<div class="comment-text comment-empty">bez komentarza</div>`
+                              }
                             </div>
                           </div>
                         `;
-                      }).join('')}
+                        })
+                        .join('')}
                     </div>`
                 }
               </div>
               `;
-            }).join('')}
+              })
+              .join('')}
           </div>
         </div>
         <div class="modal-footer">

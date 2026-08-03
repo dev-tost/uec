@@ -22,6 +22,7 @@ js/                      ← logika strony, podzielona na pliki (bez żadnego bu
 ```
 
 ### `index.html`
+
 Wciąga `style.css` i ładuje `js/main.js` jako `<script type="module">`. Cała strona jest budowana w JavaScripcie.
 
 Brak bundlera — moduły importują się nawzajem po względnych ścieżkach (`import ... from './helpers.js?v=...'`).
@@ -33,9 +34,11 @@ node scripts/bump-cache-version.js
 ```
 
 ### `style.css`
+
 Komentarze z numerami sekcji.
 
 ### Baza danych
+
 Cały stan trzymany jest w Supabase (adres i klucz publiczny na górze `js/supabase.js`).
 
 Tabele: `team`, `rounds`, `draws`, `coffees`, `purchases`, `ratings`. Zdjęcia kupionej kawy lądują w Storage
@@ -44,6 +47,7 @@ buckecie `coffee-photos` (upload przez `sb.uploadPhoto()`).
 `js/state.js` przy starcie pobiera wszystko naraz (`loadData()`) i normalizuje do jednej struktury `state.data`.
 
 ### Kim jestem
+
 Przy pierwszym wejściu użytkownik wybiera siebie z listy zespołu — wybór zapamiętywany jest w `localStorage`
 (`akcja-kawowa-who`). Na tej podstawie strona wie, kto aktualnie ocenia kawę / czyja jest kolej (patrz `state.whoAmI`).
 

@@ -1,9 +1,9 @@
-import { state } from './state.js?v=202607291634';
-import { sb } from './supabase.js?v=202607291634';
-import { $, uid, inGame, memberById } from './helpers.js?v=202607291634';
-import { render } from './render.js?v=202607291634';
-import { animateReel } from './animations.js?v=202607291634';
-import { showToast } from './toast.js?v=202607291634';
+import { state } from './state.js?v=202607311530';
+import { sb } from './supabase.js?v=202607311530';
+import { $, uid, inGame, memberById } from './helpers.js?v=202607311530';
+import { render } from './render.js?v=202607311530';
+import { animateReel } from './animations.js?v=202607311530';
+import { showToast } from './toast.js?v=202607311530';
 
 /* ---------- AKCJE ZAPISU ---------- */
 
@@ -31,7 +31,7 @@ export async function startDraw() {
     // użyj ID z bazy (może się różnić od lokalnie wygenerowanego)
     const actualDrawId = (Array.isArray(savedDraw) ? savedDraw[0] : savedDraw)?.id ?? drawId;
     // dodaj lokalnie (bez przeładowania strony, żeby nie przerywać animacji)
-    let currentRoundObj = state.data.rounds.find(r => r.number === state.data.currentRound);
+    let currentRoundObj = state.data.rounds.find((r) => r.number === state.data.currentRound);
     if (!currentRoundObj) {
       currentRoundObj = { number: state.data.currentRound, draws: [] };
       state.data.rounds.unshift(currentRoundObj);
@@ -44,17 +44,22 @@ export async function startDraw() {
 }
 
 export async function savePurchase() {
-  const brand    = $('#f-brand')?.value?.trim();
-  const variety  = $('#f-variety')?.value?.trim();
+  const brand = $('#f-brand')?.value?.trim();
+  const variety = $('#f-variety')?.value?.trim();
   const priceRaw = $('#f-price')?.value;
-  const price    = parseInt(priceRaw, 10);
+  const price = parseInt(priceRaw, 10);
   const fileInput = $('#f-photo');
-  const file    = fileInput?.files?.[0];
-  const drawId  = state.modalData.drawId;
+  const file = fileInput?.files?.[0];
+  const drawId = state.modalData.drawId;
 
-  const existingCoffee = brand && variety && state.data.coffees.find(c =>
-    c.brand.trim().toLowerCase() === brand.toLowerCase() &&
-    c.variety.trim().toLowerCase() === variety.toLowerCase());
+  const existingCoffee =
+    brand &&
+    variety &&
+    state.data.coffees.find(
+      (c) =>
+        c.brand.trim().toLowerCase() === brand.toLowerCase() &&
+        c.variety.trim().toLowerCase() === variety.toLowerCase(),
+    );
 
   const errors = {};
   if (!brand) errors.brand = 'Podaj markę.';
@@ -120,8 +125,8 @@ export async function savePurchase() {
 
 export async function saveRating() {
   const purchaseId = state.modalData.purchaseId;
-  const score      = state.modalData.score;
-  const comment    = $('#f-rating-comment')?.value?.trim() || null;
+  const score = state.modalData.score;
+  const comment = $('#f-rating-comment')?.value?.trim() || null;
 
   if (!purchaseId || !score) return;
 
@@ -152,20 +157,30 @@ export async function saveRating() {
 }
 
 export async function saveNewMember() {
-  const name      = $('#f-member-name')?.value?.trim();
-  const drinkRaw  = $('#f-member-drink')?.value?.trim();
-  const drink     = drinkRaw || 'kawa';
-  const gender    = document.querySelector('input[name="f-gender"]:checked')?.value || 'K';
+  const name = $('#f-member-name')?.value?.trim();
+  const drinkRaw = $('#f-member-drink')?.value?.trim();
+  const drink = drinkRaw || 'kawa';
+  const gender = document.querySelector('input[name="f-gender"]:checked')?.value || 'K';
 
   if (!name) {
-    Object.assign(state.modalData, { errors: { name: 'Wpisz imię uczestnika.' }, name, drink: drinkRaw, gender });
+    Object.assign(state.modalData, {
+      errors: { name: 'Wpisz imię uczestnika.' },
+      name,
+      drink: drinkRaw,
+      gender,
+    });
     render();
     return;
   }
 
-  const nameExists = state.data.team.some(p => p.name.toLowerCase() === name.toLowerCase());
+  const nameExists = state.data.team.some((p) => p.name.toLowerCase() === name.toLowerCase());
   if (nameExists) {
-    Object.assign(state.modalData, { errors: { name: `„${name}” już jest w zespole.` }, name, drink: drinkRaw, gender });
+    Object.assign(state.modalData, {
+      errors: { name: `„${name}” już jest w zespole.` },
+      name,
+      drink: drinkRaw,
+      gender,
+    });
     render();
     return;
   }
@@ -205,20 +220,32 @@ export async function saveEditMember() {
   const member = memberById(memberId);
   if (!member) return;
 
-  const name      = $('#f-edit-member-name')?.value?.trim();
-  const drinkRaw  = $('#f-edit-member-drink')?.value?.trim();
-  const drink     = drinkRaw || 'kawa';
-  const gender    = document.querySelector('input[name="f-edit-gender"]:checked')?.value || 'K';
+  const name = $('#f-edit-member-name')?.value?.trim();
+  const drinkRaw = $('#f-edit-member-drink')?.value?.trim();
+  const drink = drinkRaw || 'kawa';
+  const gender = document.querySelector('input[name="f-edit-gender"]:checked')?.value || 'K';
 
   if (!name) {
-    Object.assign(state.modalData, { errors: { name: 'Wpisz imię uczestnika.' }, name, drink: drinkRaw, gender });
+    Object.assign(state.modalData, {
+      errors: { name: 'Wpisz imię uczestnika.' },
+      name,
+      drink: drinkRaw,
+      gender,
+    });
     render();
     return;
   }
 
-  const nameExists = state.data.team.some(p => p.id !== memberId && p.name.toLowerCase() === name.toLowerCase());
+  const nameExists = state.data.team.some(
+    (p) => p.id !== memberId && p.name.toLowerCase() === name.toLowerCase(),
+  );
   if (nameExists) {
-    Object.assign(state.modalData, { errors: { name: `„${name}” już jest w zespole.` }, name, drink: drinkRaw, gender });
+    Object.assign(state.modalData, {
+      errors: { name: `„${name}” już jest w zespole.` },
+      name,
+      drink: drinkRaw,
+      gender,
+    });
     render();
     return;
   }
@@ -251,7 +278,10 @@ export async function saveEditMember() {
 export async function deactivateMember(memberId) {
   const member = memberById(memberId);
   if (!member) return;
-  if (!confirm(`Usunąć ${member.name} z zespołu? Osoba zniknie z losowania, ale historia pozostanie.`)) return;
+  if (
+    !confirm(`Usunąć ${member.name} z zespołu? Osoba zniknie z losowania, ale historia pozostanie.`)
+  )
+    return;
 
   // zmieniamy od razu na ekranie, nie czekając na odpowiedź serwera
   member.active = false;
