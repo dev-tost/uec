@@ -507,7 +507,7 @@ export function renderRanking() {
           return `
           <div class="rank-card ${i === 0 ? 'top1' : ''} ${needsRate ? 'needs-rate' : ''}" data-card="${c.id}">
             <div class="photo">
-              <img src="${c.photo}" alt="kawa" style="width:100%;height:100%;object-fit:cover;border-radius:8px"/>
+              <img src="${c.photo}" alt="kawa" style="width:100%;height:100%;object-fit:contain;border-radius:8px"/>
             </div>
             <div class="body">
               <div class="header">
@@ -543,7 +543,7 @@ export function renderRanking() {
             <div class="rank-row ${needsRate ? 'needs-rate' : ''}" data-card="${c.id}">
               <span class="num">#${idx + 4}</span>
               <div class="thumb">
-                ${c.photo ? `<img src="${c.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:4px"/>` : ''}
+                ${c.photo ? `<img src="${c.photo}" style="width:100%;height:100%;object-fit:contain;border-radius:4px"/>` : ''}
               </div>
               <div class="text">
                 <div class="b">${c.brand} <span class="v">· ${c.variety}</span> ${needsRate ? `<span class="badge badge-rate">do oceny</span>` : ''}</div>

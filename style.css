@@ -748,7 +748,7 @@ table.data tr:hover {
   border-color: var(--coffee);
 }
 .rank-card .photo {
-  aspect-ratio: 4/3;
+  aspect-ratio: 5/3;
   background: var(--cream);
   display: flex;
   align-items: center;
@@ -760,7 +760,7 @@ table.data tr:hover {
 .rank-card .photo img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 .rank-card .body {
   padding: 14px;
@@ -821,8 +821,8 @@ table.data tr:hover {
   color: var(--ink-soft);
 }
 .rank-row .thumb {
-  width: 48px;
-  height: 48px;
+  width: 38px;
+  height: 38px;
   background: var(--cream);
   border-radius: 6px;
   flex-shrink: 0;
@@ -831,7 +831,7 @@ table.data tr:hover {
 .rank-row .thumb img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 .rank-row .text {
   flex: 1;
@@ -1326,8 +1326,8 @@ table.data tr:hover {
   align-items: center;
 }
 .coffee-card-photo {
-  width: 72px;
-  height: 72px;
+  width: 58px;
+  height: 58px;
   flex-shrink: 0;
   background: var(--cream);
   border-radius: 8px;
@@ -1339,7 +1339,7 @@ table.data tr:hover {
 .coffee-card-photo img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 .coffee-card-info {
   flex: 1;
