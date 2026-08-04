@@ -109,6 +109,8 @@ button {
 .shell {
   display: flex;
   height: 100vh;
+  max-width: 1556px;
+  margin: 0 auto;
   overflow: hidden;
 }
 
