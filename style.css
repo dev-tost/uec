@@ -717,7 +717,7 @@ table.data tr:hover {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 }
 .rank-card {
   background: var(--paper-2);
