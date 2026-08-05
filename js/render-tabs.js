@@ -528,7 +528,6 @@ export function renderRanking() {
     ${
       rest.length
         ? `
-      <div class="mono" style="margin-bottom:8px">pozostałe</div>
       <div class="rank-list">
         ${rest
           .map((c, idx) => {
