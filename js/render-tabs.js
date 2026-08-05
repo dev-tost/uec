@@ -530,12 +530,6 @@ export function renderRanking() {
         ? `
       <div class="mono" style="margin-bottom:8px">pozostałe</div>
       <div class="rank-list">
-        <div class="rank-row" style="background:none; border:none; padding:0 14px;">
-          <span class="mono" style="width:36px">#</span>
-          <span style="width:48px"></span>
-          <span class="mono" style="flex:1">kawa</span>
-          <span class="mono">ocena</span>
-        </div>
         ${rest
           .map((c, idx) => {
             const needsRate = c.purchases.some((p) => !myRatingForPurchase(p.id));
