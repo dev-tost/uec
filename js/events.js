@@ -18,7 +18,7 @@ export function attachEvents() {
   document.querySelectorAll('[data-who]').forEach((el) => {
     el.onclick = () => {
       state.whoAmI = el.dataset.who;
-      localStorage.setItem('akcja-kawowa-who', state.whoAmI);
+      localStorage.setItem('uec-who', state.whoAmI);
       render();
     };
   });
@@ -48,7 +48,7 @@ export function attachEvents() {
   if (btnLogout)
     btnLogout.onclick = () => {
       state.whoAmI = null;
-      localStorage.removeItem('akcja-kawowa-who');
+      localStorage.removeItem('uec-who');
       render();
     };
 

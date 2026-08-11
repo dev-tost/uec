@@ -4,7 +4,7 @@ import { sb } from './supabase.js?v=202607311530';
 export const state = {
   data: null,
   tab: 'losowanie',
-  whoAmI: localStorage.getItem('akcja-kawowa-who') || null,
+  whoAmI: localStorage.getItem('uec-who') || null,
   draw: { stage: 'idle', winner: null, gifUrl: null },
   modal: null, // 'purchase' | 'rating' | null
   modalData: {},

@@ -49,7 +49,7 @@ buckecie `coffee-photos` (upload przez `sb.uploadPhoto()`).
 ### Kim jestem
 
 Przy pierwszym wejściu użytkownik wybiera siebie z listy zespołu — wybór zapamiętywany jest w `localStorage`
-(`akcja-kawowa-who`). Na tej podstawie strona wie, kto aktualnie ocenia kawę / czyja jest kolej (patrz `state.whoAmI`).
+(`uec-who`). Na tej podstawie strona wie, kto aktualnie ocenia kawę / czyja jest kolej (patrz `state.whoAmI`).
 
 ## Narzędzia deweloperskie
 
