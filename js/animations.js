@@ -1,6 +1,6 @@
-import { state } from './state.js?v=202607311530';
-import { $, inGame } from './helpers.js?v=202607311530';
-import { render } from './render.js?v=202607311530';
+import { state } from './state.js?v=202608251347';
+import { $, inGame } from './helpers.js?v=202608251347';
+import { render } from './render.js?v=202608251347';
 
 /* ---------- ANIMACJA LOSOWANIA ---------- */
 export function animateReel(winner) {

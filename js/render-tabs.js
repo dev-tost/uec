@@ -1,4 +1,4 @@
-import { state } from './state.js?v=202607311530';
+import { state } from './state.js?v=202608251347';
 import {
   initials,
   memberById,
@@ -16,7 +16,7 @@ import {
   coffeeScore,
   ocenLabel,
   myRatingForPurchase,
-} from './helpers.js?v=202607311530';
+} from './helpers.js?v=202608251347';
 
 /* ---------- ZAKŁADKA: LOSOWANIE ---------- */
 export function renderLosowanie() {
@@ -507,7 +507,7 @@ export function renderRanking() {
           return `
           <div class="rank-card ${i === 0 ? 'top1' : ''} ${needsRate ? 'needs-rate' : ''}" data-card="${c.id}">
             <div class="photo">
-              <img src="${c.photo}" alt="kawa" style="width:100%;height:100%;object-fit:contain;border-radius:8px"/>
+              <img src="${c.photo}" alt="kawa"/>
             </div>
             <div class="body">
               <div class="header">

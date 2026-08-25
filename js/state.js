@@ -1,4 +1,4 @@
-import { sb } from './supabase.js?v=202607311530';
+import { sb } from './supabase.js?v=202608251347';
 
 /* ---------- STAN APLIKACJI ---------- */
 export const state = {

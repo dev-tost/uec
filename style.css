@@ -755,6 +755,8 @@ table.data tr:hover {
   color: var(--ink-soft);
   font-size: 12px;
   border-bottom: 1px solid var(--line);
+  border-radius: var(--radius) var(--radius) 0 0;
+  overflow: hidden;
 }
 .rank-card .photo img {
   width: 100%;
